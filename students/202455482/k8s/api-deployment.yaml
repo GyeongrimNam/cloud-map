@@ -1,0 +1,75 @@
+# PostgREST: DB의 api 스키마(View)를 읽기 전용 REST API로 공개합니다. 직접 작성한 코드는 없습니다.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-map-api
+  labels:
+    app: cloud-map-api
+    app.kubernetes.io/part-of: cloud-map
+  annotations:
+    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"cloud-map-db"}]'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloud-map-api
+  template:
+    metadata:
+      labels:
+        app: cloud-map-api
+    spec:
+      containers:
+        - name: postgrest
+          image: docker.io/postgrest/postgrest:v12.2.3
+          ports:
+            - name: http
+              containerPort: 3000
+            - name: admin
+              containerPort: 3001
+          env:
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  name: cloud-map-db-secret
+                  key: POSTGRESQL_USER
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cloud-map-db-secret
+                  key: POSTGRESQL_PASSWORD
+            - name: PGDATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: cloud-map-db-secret
+                  key: POSTGRESQL_DATABASE
+            # 계정·비밀번호는 위 PGUSER/PGPASSWORD(Secret)를 사용합니다.
+            - name: PGRST_DB_URI
+              value: host=cloud-map-db port=5432 dbname=$(PGDATABASE)
+            - name: PGRST_DB_SCHEMAS
+              value: api
+            - name: PGRST_DB_ANON_ROLE
+              value: web_anon
+            - name: PGRST_SERVER_PORT
+              value: "3000"
+            # /live, /ready 상태 확인 전용 포트
+            - name: PGRST_ADMIN_SERVER_PORT
+              value: "3001"
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 3001
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: 3001
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi

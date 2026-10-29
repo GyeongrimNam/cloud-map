@@ -1,0 +1,15 @@
+# 클러스터 내부 전용 API 주소: cloud-map-api:3000 (nginx가 /api/ 요청을 전달)
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloud-map-api
+  labels:
+    app: cloud-map-api
+    app.kubernetes.io/part-of: cloud-map
+spec:
+  selector:
+    app: cloud-map-api
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000

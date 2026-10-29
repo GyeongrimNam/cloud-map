@@ -1,0 +1,17 @@
+# 외부 공개 주소. host를 비워 두면 OpenShift가 프로젝트에 맞는 주소를 자동으로 만듭니다.
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: cloud-map-web
+  labels:
+    app: cloud-map-web
+    app.kubernetes.io/part-of: cloud-map
+spec:
+  to:
+    kind: Service
+    name: cloud-map-web
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

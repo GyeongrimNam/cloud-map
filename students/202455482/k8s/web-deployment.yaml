@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-map-web 
+  labels:
+    app: cloud-map-web
+    app.kubernetes.io/part-of: cloud-map
+    app.openshift.io/runtime: nginx
+  annotations: #주석
+    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"cloud-map-api"}]'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloud-map-web
+  template:
+    metadata:
+      labels:
+        app: cloud-map-web
+    spec:
+      containers:
+        - name: nginx
+          image: registry.access.redhat.com/ubi9/nginx-124:1-1793106205
+          # 이미지 기본 명령은 S2I 사용법 출력이므로 nginx를 직접 실행합니다.
+          command: ["nginx", "-g", "daemon off;"]
+          ports:
+            - name: http
+              containerPort: 8080
+          volumeMounts:
+            # 웹 화면 파일(HTML/CSS/JS/아이콘) → nginx 문서 루트
+            - name: web-content
+              mountPath: /opt/app-root/src
+              readOnly: true
+            # /api/ → PostgREST 프록시 설정 → 기본 server 블록에 포함
+            - name: nginx-conf
+              mountPath: /opt/app-root/etc/nginx.default.d
+              readOnly: true
+          #pod가 준비 됐는지 확인하기 위함   
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 2
+            periodSeconds: 10  #10초마다 확인
+          #
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+      volumes:
+        # 화면 파일과 아이콘 ConfigMap을 nginx 문서 루트 한 폴더에 합쳐서 마운트합니다.
+        - name: web-content
+          projected:
+            sources:
+              - configMap:
+                  name: cloud-map-web
+              - configMap:
+                  name: cloud-map-web-icons
+        - name: nginx-conf
+          configMap:
+            name: cloud-map-web-nginx

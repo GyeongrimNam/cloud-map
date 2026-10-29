@@ -1,0 +1,15 @@
+# 클러스터 내부 전용 DB 주소: cloud-map-db:5432 (외부 Route 없음)
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloud-map-db
+  labels:
+    app: cloud-map-db
+    app.kubernetes.io/part-of: cloud-map
+spec:
+  selector:
+    app: cloud-map-db
+  ports:
+    - name: postgresql
+      port: 5432
+      targetPort: 5432

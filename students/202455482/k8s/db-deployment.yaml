@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-map-db
+  labels:
+    app: cloud-map-db
+    app.kubernetes.io/part-of: cloud-map
+    app.openshift.io/runtime: postgresql
+spec:
+  replicas: 1
+  # PVC(ReadWriteOnce)를 한 Pod만 쓰도록 기존 Pod를 내린 뒤 새 Pod를 올립니다.
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: cloud-map-db
+  template:
+    metadata:
+      labels:
+        app: cloud-map-db
+    spec:
+      containers:
+        - name: postgresql
+          image: quay.io/sclorg/postgresql-16-c9s:20261021
+          ports:
+            - name: postgresql
+              containerPort: 5432
+          # POSTGRESQL_USER / PASSWORD / DATABASE로 최초 기동 시 계정과 DB를 만듭니다.
+          envFrom:
+            - secretRef:
+                name: cloud-map-db-secret
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/pgsql/data
+            # 이미지가 기동할 때마다 실행하는 start 훅: 스키마·샘플·API View 준비
+            - name: db-init
+              mountPath: /opt/app-root/src/postgresql-start
+              readOnly: true
+            - name: sample-data
+              mountPath: /cloud-map-data
+              readOnly: true
+          readinessProbe:
+            exec:
+              command: ["/usr/libexec/check-container"]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            exec:
+              command: ["/usr/libexec/check-container", "--live"]
+            initialDelaySeconds: 120
+            periodSeconds: 20
+            timeoutSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: cloud-map-db-data
+        - name: db-init
+          configMap:
+            name: cloud-map-db-init
+        # 샘플 ConfigMap 3개를 한 폴더(/cloud-map-data)에 합쳐서 마운트합니다.
+        - name: sample-data
+          projected:
+            sources:
+              - configMap:
+                  name: cloud-map-sample-architecture
+              - configMap:
+                  name: cloud-map-sample-findings-en
+              - configMap:
+                  name: cloud-map-sample-findings-ko

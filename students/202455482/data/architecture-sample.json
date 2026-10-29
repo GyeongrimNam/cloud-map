@@ -1,0 +1,145 @@
+{
+  "dataset": "synthetic_cloud_map_topology",
+  "sample_only": true,
+  "synthetic_relationships": true,
+  "notes": "All nodes, edges, and finding_resource_mappings are DEMO-ONLY and DO NOT imply that Prowler observed these exact infrastructure relationships or that sampled security results apply to those nodes.",
+  "resources": [
+    {
+      "resource_id": "topo-vpc-001",
+      "resource_type": "vpc",
+      "resource_name": "demo-vpc",
+      "region": "ap-northeast-2",
+      "is_synthetic": true
+    },
+    {
+      "resource_id": "topo-subnet-public-001",
+      "resource_type": "subnet",
+      "resource_name": "demo-public-subnet",
+      "region": "ap-northeast-2",
+      "is_synthetic": true
+    },
+    {
+      "resource_id": "topo-subnet-private-001",
+      "resource_type": "subnet",
+      "resource_name": "demo-private-subnet",
+      "region": "ap-northeast-2",
+      "is_synthetic": true
+    },
+    {
+      "resource_id": "topo-alb-001",
+      "resource_type": "alb",
+      "resource_name": "demo-public-alb",
+      "region": "ap-northeast-2",
+      "is_synthetic": true
+    },
+    {
+      "resource_id": "topo-ec2-001",
+      "resource_type": "ec2-instance",
+      "resource_name": "demo-web-ec2",
+      "region": "ap-northeast-2",
+      "is_synthetic": true
+    },
+    {
+      "resource_id": "topo-s3-001",
+      "resource_type": "s3-bucket",
+      "resource_name": "demo-logs-bucket",
+      "region": "ap-northeast-2",
+      "is_synthetic": true
+    },
+    {
+      "resource_id": "topo-cloudtrail-001",
+      "resource_type": "cloudtrail-trail",
+      "resource_name": "demo-security-trail",
+      "region": "ap-northeast-2",
+      "is_synthetic": true
+    },
+    {
+      "resource_id": "topo-iam-001",
+      "resource_type": "iam-role",
+      "resource_name": "demo-ec2-role",
+      "region": "global",
+      "is_synthetic": true
+    }
+  ],
+  "relationships": [
+    {
+      "source_id": "topo-vpc-001",
+      "target_id": "topo-subnet-public-001",
+      "relation_type": "contains",
+      "is_synthetic": true
+    },
+    {
+      "source_id": "topo-vpc-001",
+      "target_id": "topo-subnet-private-001",
+      "relation_type": "contains",
+      "is_synthetic": true
+    },
+    {
+      "source_id": "topo-subnet-public-001",
+      "target_id": "topo-alb-001",
+      "relation_type": "hosts",
+      "is_synthetic": true
+    },
+    {
+      "source_id": "topo-subnet-private-001",
+      "target_id": "topo-ec2-001",
+      "relation_type": "hosts",
+      "is_synthetic": true
+    },
+    {
+      "source_id": "topo-alb-001",
+      "target_id": "topo-ec2-001",
+      "relation_type": "routes_to",
+      "is_synthetic": true
+    },
+    {
+      "source_id": "topo-ec2-001",
+      "target_id": "topo-iam-001",
+      "relation_type": "assumes_role",
+      "is_synthetic": true
+    },
+    {
+      "source_id": "topo-cloudtrail-001",
+      "target_id": "topo-s3-001",
+      "relation_type": "logs_to",
+      "is_synthetic": true
+    }
+  ],
+  "finding_resource_mappings": [
+    {
+      "source_resource_id": "sample-vpc-001",
+      "target_resource_id": "topo-vpc-001",
+      "is_synthetic": true
+    },
+    {
+      "source_resource_id": "sample-subnet-001",
+      "target_resource_id": "topo-subnet-public-001",
+      "is_synthetic": true
+    },
+    {
+      "source_resource_id": "sample-subnet-002",
+      "target_resource_id": "topo-subnet-private-001",
+      "is_synthetic": true
+    },
+    {
+      "source_resource_id": "sample-ec2-instance-001",
+      "target_resource_id": "topo-ec2-001",
+      "is_synthetic": true
+    },
+    {
+      "source_resource_id": "sample-alb-001",
+      "target_resource_id": "topo-alb-001",
+      "is_synthetic": true
+    },
+    {
+      "source_resource_id": "sample-s3-bucket-001",
+      "target_resource_id": "topo-s3-001",
+      "is_synthetic": true
+    },
+    {
+      "source_resource_id": "sample-cloudtrail-trail-001",
+      "target_resource_id": "topo-cloudtrail-001",
+      "is_synthetic": true
+    }
+  ]
+}

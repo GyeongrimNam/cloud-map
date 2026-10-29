@@ -1,0 +1,358 @@
+apiVersion: v1
+data:
+  translations.json: |
+    {
+      "dataset": "cloud_map_korean_display_summaries",
+      "note": "원본 Prowler OCSF 점검 메시지를 기반으로 한 한국어 표시 데이터. 식별자는 익명화됨. 원문·원본 컴플라이언스는 finding_details.raw_data에 보존. 개별 리소스 대상은 점검 범위와 설정을 재확인 후 조치.",
+      "translations": [
+        {
+          "finding_id": "finding-001",
+          "check_title_ko": "VPC 다중 리전 구성 점검",
+          "description_ko": "여러 AWS 리전에 VPC가 배치되어 있는지 확인한다.",
+          "status_detail_ko": "점검 대상 AWS 계정에서 VPC가 단일 리전에만 존재하는 것으로 확인됨.",
+          "risk_details_ko": "단일 리전 의존으로 리전 장애 시 가용성과 복원력이 저하될 수 있다.",
+          "remediation_ko": "서비스 요구사항에 따라 다른 리전에 복구용 VPC와 재해 복구 절차를 구성한다."
+        },
+        {
+          "finding_id": "finding-002",
+          "check_title_ko": "EC2용 VPC 엔드포인트 구성 점검",
+          "description_ko": "VPC에 Amazon EC2 API용 인터페이스 엔드포인트가 있는지 확인한다.",
+          "status_detail_ko": "점검 대상 VPC에 Amazon EC2 API용 인터페이스 VPC 엔드포인트가 없음.",
+          "risk_details_ko": "엔드포인트가 없으면 EC2 API 접근이 인터넷 경로 또는 NAT를 사용할 수 있다.",
+          "remediation_ko": "필요한 VPC에 EC2 인터페이스 엔드포인트를 생성하고 사설 DNS 및 보안 그룹을 설정한다."
+        },
+        {
+          "finding_id": "finding-003",
+          "check_title_ko": "VPC Flow Logs 활성화 점검",
+          "description_ko": "VPC 네트워크 흐름 로그 수집 여부를 확인한다.",
+          "status_detail_ko": "대상 VPC에서 VPC Flow Logs가 활성화되어 있지 않음.",
+          "risk_details_ko": "Flow Logs가 없으면 트래픽 추적과 보안 사고 분석이 어려워진다.",
+          "remediation_ko": "VPC Flow Logs를 활성화하여 CloudWatch Logs 또는 S3에 기록한다."
+        },
+        {
+          "finding_id": "finding-004",
+          "check_title_ko": "서브넷의 퍼블릭 IP 자동 할당 금지 점검",
+          "description_ko": "서브넷에서 인스턴스 시작 시 퍼블릭 IPv4를 자동 할당하는지 확인한다.",
+          "status_detail_ko": "대상 서브넷에서 인스턴스 시작 시 퍼블릭 IPv4 주소를 자동 할당하도록 설정되어 있음.",
+          "risk_details_ko": "자동 할당 시 의도하지 않은 외부 노출 가능성이 높아진다.",
+          "remediation_ko": "서브넷의 MapPublicIpOnLaunch 설정을 비활성화하고 필요한 자원에만 공인 IP를 부여한다."
+        },
+        {
+          "finding_id": "finding-005",
+          "check_title_ko": "서브넷의 퍼블릭 IP 자동 할당 금지 점검",
+          "description_ko": "서브넷에서 인스턴스 시작 시 퍼블릭 IPv4를 자동 할당하는지 확인한다.",
+          "status_detail_ko": "대상 서브넷에서 인스턴스 시작 시 퍼블릭 IPv4 주소를 자동 할당하도록 설정되어 있음.",
+          "risk_details_ko": "자동 할당 시 의도하지 않은 외부 노출 가능성이 높아진다.",
+          "remediation_ko": "서브넷의 MapPublicIpOnLaunch 설정을 비활성화하고 필요한 자원에만 공인 IP를 부여한다."
+        },
+        {
+          "finding_id": "finding-006",
+          "check_title_ko": "리전별 EBS 기본 암호화 활성화 점검",
+          "description_ko": "현재 리전에서 새 EBS 볼륨의 기본 암호화 설정을 확인한다.",
+          "status_detail_ko": "점검 대상 리전에서 EBS 기본 암호화가 활성화되어 있지 않음.",
+          "risk_details_ko": "기본 암호화가 꺼져 있으면 새 볼륨이나 스냅샷이 암호화되지 않을 수 있다.",
+          "remediation_ko": "해당 리전의 EBS 기본 암호화를 활성화하고 필요한 KMS 키를 지정한다."
+        },
+        {
+          "finding_id": "finding-007",
+          "check_title_ko": "EBS 스냅샷 암호화 점검",
+          "description_ko": "EBS 볼륨 및 연결된 스냅샷의 암호화 상태를 확인한다. 이번 점검 메시지는 스냅샷의 암호화 누락을 보고한다.",
+          "status_detail_ko": "점검 대상 EBS 스냅샷이 암호화되어 있지 않음.",
+          "risk_details_ko": "암호화되지 않은 저장 데이터가 유출될 경우 기밀성에 영향을 줄 수 있다.",
+          "remediation_ko": "암호화된 스냅샷 복사본과 새 암호화 볼륨으로 안전하게 마이그레이션한다."
+        },
+        {
+          "finding_id": "finding-008",
+          "check_title_ko": "EBS 볼륨 백업 계획 적용 점검",
+          "description_ko": "EBS 볼륨이 AWS Backup의 백업 계획에 포함되는지 확인한다.",
+          "status_detail_ko": "점검 대상 EBS 볼륨이 AWS Backup 백업 계획에 포함되어 있지 않음.",
+          "risk_details_ko": "백업 계획이 없으면 장애·실수로 인한 데이터 복구가 어려워질 수 있다.",
+          "remediation_ko": "AWS Backup 계획과 리소스 할당을 구성해 정기 백업 및 보존 정책을 적용한다."
+        },
+        {
+          "finding_id": "finding-009",
+          "check_title_ko": "EBS 스냅샷 보유 여부 점검",
+          "description_ko": "EBS 볼륨에 복구에 사용할 스냅샷이 있는지 확인한다.",
+          "status_detail_ko": "점검 대상 EBS 볼륨과 연결된 스냅샷이 확인되지 않음.",
+          "risk_details_ko": "스냅샷이 없으면 특정 시점의 데이터 복구가 어려울 수 있다.",
+          "remediation_ko": "백업 요구사항에 맞춰 EBS 스냅샷을 정기적으로 생성하고 복구를 검증한다."
+        },
+        {
+          "finding_id": "finding-010",
+          "check_title_ko": "계정·리전 기본 IMDSv2 설정 점검",
+          "description_ko": "계정의 해당 리전에서 신규 EC2 인스턴스에 적용되는 메타데이터 기본 설정을 확인한다.",
+          "status_detail_ko": "해당 계정·리전의 EC2 인스턴스 메타데이터 기본 설정에서 IMDSv2 필수 사용이 활성화되어 있지 않음.",
+          "risk_details_ko": "기본 설정이 IMDSv2를 강제하지 않으면 IMDSv1 사용 가능성이 남는다.",
+          "remediation_ko": "계정·리전의 인스턴스 메타데이터 기본값을 IMDSv2 필수로 설정한다."
+        },
+        {
+          "finding_id": "finding-011",
+          "check_title_ko": "EC2 상세 모니터링 활성화 점검",
+          "description_ko": "대상 EC2의 CloudWatch 상세 모니터링 사용 여부를 확인한다.",
+          "status_detail_ko": "점검 대상 EC2 인스턴스의 상세 모니터링이 비활성화되어 있음.",
+          "risk_details_ko": "기본 모니터링만 사용하면 성능 이상을 세밀하게 관찰하기 어렵다.",
+          "remediation_ko": "운영 필요성과 추가 비용을 고려해 EC2 상세 모니터링을 활성화한다."
+        },
+        {
+          "finding_id": "finding-012",
+          "check_title_ko": "EC2 인스턴스 IMDSv2 필수 사용 점검",
+          "description_ko": "개별 EC2에서 메타데이터 서비스에 IMDSv2 토큰을 요구하는지 확인한다.",
+          "status_detail_ko": "점검 대상 EC2 인스턴스에서 IMDSv2 사용이 필수로 설정되지 않았음.",
+          "risk_details_ko": "IMDSv1 허용 시 SSRF 등의 취약점과 결합하여 자격 증명 노출 위험이 커질 수 있다.",
+          "remediation_ko": "인스턴스의 HttpTokens를 required로 변경하고 애플리케이션 호환성을 확인한다."
+        },
+        {
+          "finding_id": "finding-013",
+          "check_title_ko": "IAM 역할이 연결된 EC2의 인터넷 노출 점검",
+          "description_ko": "IAM 인스턴스 프로파일이 연결된 EC2 인스턴스가 인터넷에서 접근 가능한지 확인한다.",
+          "status_detail_ko": "IAM 인스턴스 프로파일이 연결된 EC2 인스턴스가 인터넷에서 접근 가능한 상태임.",
+          "risk_details_ko": "외부 노출과 과도한 IAM 권한이 결합하면 탈취 시 피해 범위가 커질 수 있다.",
+          "remediation_ko": "외부 접근을 최소화하고 인스턴스 역할의 IAM 권한을 최소 권한으로 제한한다."
+        },
+        {
+          "finding_id": "finding-014",
+          "check_title_ko": "EC2 Systems Manager 관리 상태 점검",
+          "description_ko": "EC2 인스턴스가 AWS Systems Manager의 관리 대상인지 확인한다.",
+          "status_detail_ko": "점검 대상 EC2 인스턴스가 AWS Systems Manager 관리 대상에 등록되어 있지 않음.",
+          "risk_details_ko": "SSM 관리 대상이 아니면 패치·인벤토리·원격 관리 자동화가 제한될 수 있다.",
+          "remediation_ko": "SSM Agent, IAM 역할 및 네트워크 경로를 설정하여 관리 인스턴스로 등록한다."
+        },
+        {
+          "finding_id": "finding-015",
+          "check_title_ko": "EC2 퍼블릭 IP 보유 점검",
+          "description_ko": "EC2 인스턴스에 퍼블릭 IP 주소가 할당되어 있는지 확인한다.",
+          "status_detail_ko": "점검 대상 EC2 인스턴스에 퍼블릭 IP 주소가 할당되어 있음.",
+          "risk_details_ko": "퍼블릭 IP 사용은 네트워크 접근 통제 미흡 시 외부 노출로 이어질 수 있다.",
+          "remediation_ko": "필요하지 않은 퍼블릭 IP를 제거하고 사설 접근 또는 로드 밸런서를 사용한다."
+        },
+        {
+          "finding_id": "finding-016",
+          "check_title_ko": "계정 수준 S3 퍼블릭 액세스 차단 점검",
+          "description_ko": "AWS 계정의 S3 Block Public Access 설정을 확인한다.",
+          "status_detail_ko": "AWS 계정 수준의 S3 Block Public Access가 설정되지 않았음.",
+          "risk_details_ko": "계정 차단 설정이 없으면 버킷 정책이나 ACL 실수로 공개될 위험이 있다.",
+          "remediation_ko": "계정 수준 S3 Block Public Access의 적절한 차단 옵션을 활성화한다."
+        },
+        {
+          "finding_id": "finding-017",
+          "check_title_ko": "S3 버킷 교차 리전 복제 점검",
+          "description_ko": "S3 버킷의 교차 리전 복제 규칙이 요구사항대로 구성되어 있는지 확인한다.",
+          "status_detail_ko": "점검 대상 S3 버킷에 교차 리전 복제 구성이 올바르게 설정되어 있지 않음.",
+          "risk_details_ko": "복제가 없거나 잘못 설정되면 리전 장애 시 데이터 복구성이 낮아진다.",
+          "remediation_ko": "복구 요구사항에 따라 버전 관리와 S3 교차 리전 복제 규칙을 설정한다."
+        },
+        {
+          "finding_id": "finding-018",
+          "check_title_ko": "S3 버킷 교차 리전 복제 점검",
+          "description_ko": "S3 버킷의 교차 리전 복제 규칙이 요구사항대로 구성되어 있는지 확인한다.",
+          "status_detail_ko": "점검 대상 S3 버킷에 교차 리전 복제 구성이 올바르게 설정되어 있지 않음.",
+          "risk_details_ko": "복제가 없거나 잘못 설정되면 리전 장애 시 데이터 복구성이 낮아진다.",
+          "remediation_ko": "복구 요구사항에 따라 버전 관리와 S3 교차 리전 복제 규칙을 설정한다."
+        },
+        {
+          "finding_id": "finding-019",
+          "check_title_ko": "S3 버킷 교차 리전 복제 점검",
+          "description_ko": "S3 버킷의 교차 리전 복제 규칙이 요구사항대로 구성되어 있는지 확인한다.",
+          "status_detail_ko": "점검 대상 S3 버킷에 교차 리전 복제 구성이 올바르게 설정되어 있지 않음.",
+          "risk_details_ko": "복제가 없거나 잘못 설정되면 리전 장애 시 데이터 복구성이 낮아진다.",
+          "remediation_ko": "복구 요구사항에 따라 버전 관리와 S3 교차 리전 복제 규칙을 설정한다."
+        },
+        {
+          "finding_id": "finding-020",
+          "check_title_ko": "S3 버킷 교차 리전 복제 점검",
+          "description_ko": "S3 버킷의 교차 리전 복제 규칙이 요구사항대로 구성되어 있는지 확인한다.",
+          "status_detail_ko": "점검 대상 S3 버킷에 교차 리전 복제 구성이 올바르게 설정되어 있지 않음.",
+          "risk_details_ko": "복제가 없거나 잘못 설정되면 리전 장애 시 데이터 복구성이 낮아진다.",
+          "remediation_ko": "복구 요구사항에 따라 버전 관리와 S3 교차 리전 복제 규칙을 설정한다."
+        },
+        {
+          "finding_id": "finding-021",
+          "check_title_ko": "S3 이벤트 알림 활성화 점검",
+          "description_ko": "S3 버킷에 필요한 이벤트 알림 구성이 설정되어 있는지 확인한다.",
+          "status_detail_ko": "점검 대상 S3 버킷에서 이벤트 알림이 활성화되어 있지 않음.",
+          "risk_details_ko": "이벤트 알림이 없으면 객체 변경을 기반으로 한 탐지 및 후속 처리가 지연될 수 있다.",
+          "remediation_ko": "필요한 이벤트 유형에 대해 EventBridge, SQS, SNS 또는 Lambda 알림을 설정한다."
+        },
+        {
+          "finding_id": "finding-022",
+          "check_title_ko": "IAM 관리자 권한 정책 연결 점검",
+          "description_ko": "관리자 수준의 AWS 관리형 IAM 정책이 주체에 연결되어 있는지 확인한다.",
+          "status_detail_ko": "AWS 관리형 AdministratorAccess 정책이 연결되어 전체 서비스·작업에 대한 관리자 권한을 허용하고 있음.",
+          "risk_details_ko": "광범위한 관리자 권한은 자격 증명 탈취 시 계정 전반의 피해를 키운다.",
+          "remediation_ko": "불필요한 AdministratorAccess 연결을 제거하고 업무별 최소 권한 정책으로 대체한다."
+        },
+        {
+          "finding_id": "finding-023",
+          "check_title_ko": "IAM SAML 제공자 등록 점검",
+          "description_ko": "AWS 계정에 IAM SAML ID 제공자가 구성되어 있는지 확인한다.",
+          "status_detail_ko": "계정에서 등록된 SAML 자격 증명 공급자가 발견되지 않음.",
+          "risk_details_ko": "조직의 연합 인증 요구사항을 충족하지 못하면 인증 관리가 분산될 수 있다.",
+          "remediation_ko": "조직에서 SAML 기반 연합 인증을 사용해야 하는지 먼저 확인한다. 사용한다면 신뢰할 수 있는 IdP 메타데이터를 통해 IAM SAML 공급자를 등록하고 역할 신뢰 정책을 구성한다."
+        },
+        {
+          "finding_id": "finding-024",
+          "check_title_ko": "IAM 비밀번호 만료 정책 점검",
+          "description_ko": "IAM 비밀번호 정책에 점검 기준에 따른 만료 주기가 설정되어 있는지 확인한다.",
+          "status_detail_ko": "IAM 계정 비밀번호 정책에 만료 기간이 설정되어 있지 않음.",
+          "risk_details_ko": "설정된 비밀번호 수명 정책이 없으면 조직의 인증 기준을 충족하지 못할 수 있다.",
+          "remediation_ko": "조직 정책 및 해당 점검 기준에 맞는 비밀번호 만료 설정을 적용한다."
+        },
+        {
+          "finding_id": "finding-025",
+          "check_title_ko": "IAM 비밀번호 소문자 요구 점검",
+          "description_ko": "IAM 비밀번호 정책에서 영문 소문자를 요구하는지 확인한다.",
+          "status_detail_ko": "IAM 계정 비밀번호 정책에서 소문자 최소 1자 포함을 요구하지 않음.",
+          "risk_details_ko": "복잡성 요구가 부족하면 추측 가능한 비밀번호가 허용될 수 있다.",
+          "remediation_ko": "조직 비밀번호 정책에 소문자 요구 조건을 적용한다."
+        },
+        {
+          "finding_id": "finding-026",
+          "check_title_ko": "IAM 비밀번호 최소 14자 점검",
+          "description_ko": "IAM 비밀번호 정책의 최소 길이가 14자 이상인지 확인한다.",
+          "status_detail_ko": "IAM 계정 비밀번호 정책에서 최소 길이 14자를 요구하지 않음.",
+          "risk_details_ko": "짧은 비밀번호가 허용되면 추측 공격에 대한 저항성이 줄어든다.",
+          "remediation_ko": "IAM 계정 비밀번호의 최소 길이를 14자 이상으로 설정한다."
+        },
+        {
+          "finding_id": "finding-027",
+          "check_title_ko": "IAM 비밀번호 숫자 요구 점검",
+          "description_ko": "IAM 비밀번호 정책에서 숫자를 요구하는지 확인한다.",
+          "status_detail_ko": "IAM 계정 비밀번호 정책에서 숫자 최소 1자 포함을 요구하지 않음.",
+          "risk_details_ko": "복잡성 요구가 낮으면 추측 가능한 비밀번호를 허용할 수 있다.",
+          "remediation_ko": "조직 기준에 따라 비밀번호의 숫자 포함 요구사항을 활성화한다."
+        },
+        {
+          "finding_id": "finding-028",
+          "check_title_ko": "ALB 비정상 HTTP 헤더 차단 점검",
+          "description_ko": "ALB가 유효하지 않은 HTTP 헤더 필드를 제거하도록 설정됐는지 확인한다.",
+          "status_detail_ko": "대상 ALB에서 잘못된 HTTP 헤더 필드를 제거하는 옵션이 활성화되어 있지 않음.",
+          "risk_details_ko": "비정상 헤더 허용 시 헤더 해석 차이를 악용한 요청 처리 문제가 발생할 수 있다.",
+          "remediation_ko": "ALB의 routing.http.drop_invalid_header_fields.enabled를 활성화한다."
+        },
+        {
+          "finding_id": "finding-029",
+          "check_title_ko": "로드 밸런서 삭제 방지 점검",
+          "description_ko": "ELBv2 로드 밸런서의 삭제 방지 기능을 확인한다.",
+          "status_detail_ko": "대상 로드 밸런서의 삭제 방지 기능이 비활성화되어 있음.",
+          "risk_details_ko": "삭제 방지가 꺼져 있으면 실수나 오남용으로 서비스가 중단될 수 있다.",
+          "remediation_ko": "로드 밸런서의 삭제 방지 속성을 활성화한다."
+        },
+        {
+          "finding_id": "finding-030",
+          "check_title_ko": "ALB 액세스 로그 활성화 점검",
+          "description_ko": "ALB에서 요청 액세스 로그를 S3에 기록하도록 설정됐는지 확인한다.",
+          "status_detail_ko": "대상 ALB에서 액세스 로그가 설정되어 있지 않음.",
+          "risk_details_ko": "액세스 로그가 없으면 요청 이력 분석 및 보안 사고 조사가 어려워진다.",
+          "remediation_ko": "ALB 액세스 로그를 활성화하고 적절히 보호된 S3 버킷으로 전송한다."
+        },
+        {
+          "finding_id": "finding-031",
+          "check_title_ko": "ALB HTTPS 리스너 사용 점검",
+          "description_ko": "ALB 리스너가 HTTPS를 사용하거나 HTTP를 HTTPS로 리디렉션하는지 확인한다.",
+          "status_detail_ko": "대상 ALB에 암호화되지 않은 프로토콜을 사용하는 리스너가 존재함.",
+          "risk_details_ko": "암호화되지 않은 HTTP 경로는 전송 중 데이터 노출 위험이 있다.",
+          "remediation_ko": "ACM 인증서를 사용한 HTTPS 리스너를 구성하고 HTTP 요청을 리디렉션한다."
+        },
+        {
+          "finding_id": "finding-032",
+          "check_title_ko": "ALB HTTP Desync 완화 설정 점검",
+          "description_ko": "ALB의 HTTP Desync 완화 모드 설정을 확인한다.",
+          "status_detail_ko": "대상 ALB에서 HTTP Desync 완화 모드가 점검 기준에 맞게 설정되어 있음.",
+          "risk_details_ko": "부적절한 모드는 요청 해석 불일치를 악용한 공격 방어를 약화할 수 있다.",
+          "remediation_ko": "ALB Desync 완화 모드를 defensive 또는 strictest 등 적절한 모드로 유지한다."
+        },
+        {
+          "finding_id": "finding-033",
+          "check_title_ko": "CloudTrail 로그 버킷 MFA Delete 점검",
+          "description_ko": "CloudTrail 로그 저장 버킷의 MFA Delete 활성화 여부를 확인한다.",
+          "status_detail_ko": "대상 CloudTrail 로그 저장 버킷에서 MFA Delete가 활성화되어 있지 않음.",
+          "risk_details_ko": "MFA Delete가 없으면 로그 객체의 삭제 방어 수준이 낮아질 수 있다.",
+          "remediation_ko": "지원 조건과 운영 절차를 확인해 로그 버킷의 MFA Delete를 검토·설정한다."
+        },
+        {
+          "finding_id": "finding-034",
+          "check_title_ko": "CloudTrail의 CloudWatch Logs 연동 점검",
+          "description_ko": "CloudTrail이 CloudWatch Logs에 최근 로그를 전달하는지 확인한다.",
+          "status_detail_ko": "대상 단일 리전 CloudTrail이 최근 24시간 동안 로그를 전달하지 않았거나 로그 전달 대상으로 설정되지 않았음.",
+          "risk_details_ko": "로그 전달 누락 시 보안 모니터링과 이벤트 탐지가 지연된다.",
+          "remediation_ko": "Trail의 CloudWatch Logs 대상과 역할, 최근 로그 전달 상태를 점검한다."
+        },
+        {
+          "finding_id": "finding-035",
+          "check_title_ko": "CloudTrail Insights 활성화 점검",
+          "description_ko": "CloudTrail에서 Insights 이벤트 탐지가 활성화됐는지 확인한다.",
+          "status_detail_ko": "로그를 기록 중인 대상 CloudTrail에 Insights 이벤트 선택기가 설정되어 있지 않음.",
+          "risk_details_ko": "API 사용량 이상 패턴에 대한 탐지 기능이 제한될 수 있다.",
+          "remediation_ko": "필요한 Trail에 CloudTrail Insights 이벤트를 활성화한다."
+        },
+        {
+          "finding_id": "finding-036",
+          "check_title_ko": "CloudTrail 로그 KMS 암호화 점검",
+          "description_ko": "CloudTrail 로그가 KMS 키로 암호화되도록 설정되어 있는지 확인한다.",
+          "status_detail_ko": "대상 단일 리전 CloudTrail에서 로그 암호화가 비활성화되어 있음.",
+          "risk_details_ko": "적절한 암호화 키 통제가 없으면 로그 데이터 보호가 약해질 수 있다.",
+          "remediation_ko": "Trail에 적절한 KMS 키 기반 서버 측 암호화를 구성한다."
+        },
+        {
+          "finding_id": "finding-037",
+          "check_title_ko": "CloudTrail 로그 파일 무결성 검증 점검",
+          "description_ko": "CloudTrail의 로그 파일 무결성 검증 설정을 확인한다.",
+          "status_detail_ko": "대상 CloudTrail에서 로그 파일 무결성 검증이 비활성화되어 있음.",
+          "risk_details_ko": "무결성 검증이 없으면 로그 변조 여부를 입증하기 어려워진다.",
+          "remediation_ko": "CloudTrail 로그 파일 무결성 검증 기능을 활성화한다."
+        },
+        {
+          "finding_id": "finding-038",
+          "check_title_ko": "Network ACL 변경 감지 경보 점검",
+          "description_ko": "Network ACL 변경 이벤트를 감지하는 CloudWatch Logs 지표 필터와 경보를 확인한다.",
+          "status_detail_ko": "CloudWatch Logs에서 변경 감지를 위한 지표 필터 또는 연결된 경보가 확인되지 않음. 해당 점검은 네트워크 ACL 변경 감시를 확인함.",
+          "risk_details_ko": "네트워크 ACL의 변경 사항을 적시에 탐지하지 못할 수 있다.",
+          "remediation_ko": "CloudTrail 로그 기반 지표 필터와 CloudWatch 경보를 설정한다."
+        },
+        {
+          "finding_id": "finding-039",
+          "check_title_ko": "네트워크 게이트웨이 변경 감지 경보 점검",
+          "description_ko": "네트워크 게이트웨이 변경 이벤트에 대한 지표 필터와 경보를 확인한다.",
+          "status_detail_ko": "CloudWatch Logs에서 변경 감지를 위한 지표 필터 또는 연결된 경보가 확인되지 않음. 해당 점검은 네트워크 게이트웨이 변경 감시를 확인함.",
+          "risk_details_ko": "게이트웨이 변경으로 인한 트래픽 경로 변경을 놓칠 수 있다.",
+          "remediation_ko": "관련 CloudTrail 이벤트에 지표 필터와 CloudWatch 경보를 구성한다."
+        },
+        {
+          "finding_id": "finding-040",
+          "check_title_ko": "라우팅 테이블 변경 감지 경보 점검",
+          "description_ko": "VPC 라우팅 테이블 변경 이벤트 감시 구성을 확인한다.",
+          "status_detail_ko": "CloudWatch Logs에서 변경 감지를 위한 지표 필터 또는 연결된 경보가 확인되지 않음. 해당 점검은 라우팅 테이블 변경 감시를 확인함.",
+          "risk_details_ko": "악의적이거나 실수로 변경된 라우팅 경로를 신속히 탐지하기 어렵다.",
+          "remediation_ko": "라우팅 변경에 대응하는 CloudWatch Logs 지표 필터와 경보를 설정한다."
+        },
+        {
+          "finding_id": "finding-041",
+          "check_title_ko": "EventBridge 이벤트 버스 교차 계정 접근 점검",
+          "description_ko": "EventBridge 이벤트 버스 정책이 다른 AWS 계정의 접근을 허용하는지 확인한다.",
+          "status_detail_ko": "기본 EventBridge 이벤트 버스의 리소스 정책에서 다른 AWS 계정의 접근을 허용하지 않음.",
+          "risk_details_ko": "불필요한 교차 계정 권한은 이벤트 전송 권한을 확대할 수 있다.",
+          "remediation_ko": "버스 리소스 정책에서 허용 계정과 조건을 최소 범위로 제한한다."
+        },
+        {
+          "finding_id": "finding-042",
+          "check_title_ko": "EventBridge 이벤트 버스 교차 계정 접근 점검",
+          "description_ko": "EventBridge 이벤트 버스 정책이 다른 AWS 계정의 접근을 허용하는지 확인한다.",
+          "status_detail_ko": "기본 EventBridge 이벤트 버스의 리소스 정책에서 다른 AWS 계정의 접근을 허용하지 않음.",
+          "risk_details_ko": "불필요한 교차 계정 권한은 이벤트 전송 권한을 확대할 수 있다.",
+          "remediation_ko": "버스 리소스 정책에서 허용 계정과 조건을 최소 범위로 제한한다."
+        },
+        {
+          "finding_id": "finding-043",
+          "check_title_ko": "S3 버킷 KMS 암호화 점검",
+          "description_ko": "S3 버킷의 기본 암호화가 AWS KMS를 사용하는지 확인한다.",
+          "status_detail_ko": "대상 S3 버킷에 AWS KMS 기반 서버 측 암호화(SSE-KMS)가 설정되어 있지 않음.",
+          "risk_details_ko": "KMS 기반 키 관리 요구사항을 충족하지 못할 수 있다.",
+          "remediation_ko": "S3 기본 암호화를 SSE-KMS로 설정하고 KMS 키 접근 정책을 검토한다."
+        }
+      ]
+    }
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/part-of: cloud-map
+  name: cloud-map-sample-findings-ko
