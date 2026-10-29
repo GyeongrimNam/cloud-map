@@ -4,10 +4,10 @@
 
 | 항목 | 내용 |
 |---|---|
-| **서비스 이름** | Cloud Map |
-| **한 줄 설명** | Prowler로 스캔을 마친 결과 JSON을 PostgreSQL에 적재하고, 이 데이터로 AWS 구성도와 보안 점검 항목을 화면에 표시하는 3-tier 웹앱 |
-| **주제 선택 이유** | 문제<br>- AWS를 쓰지만 보안 전문가가 아닌 사용자는 Prowler 스캔 결과(JSON)만으로 어느 리소스에 어떤 문제가 있는지 파악하기 어려움<br>해결 방향<br>- AWS 구성도: DB의 리소스 관계로 구성도를 생성하고, 리소스별 점검 결과를 함께 표시해 문제 위치를 시각화<br>- 보안 점검 페이지: 점검 항목마다 무엇이 문제인지(점검 결과), 왜 위험한지(보안 위험), 어떻게 해결하는지(AWS 개선 권고), 어떤 정책 기준과 관련되는지(ISMS-P 매핑)를 한 화면에서 파악 |
-| **향후 확장** | Prowler 점검 실행<br>- 웹 화면에서 AWS 계정을 연결하고 원하는 시점에 Prowler 점검 실행<br>- 점검 결과를 DB에 바로 적재해 구성도와 점검 목록에 반영<br>ISMS-P 매핑<br>- ISMS-P 인증 기준 항목(번호·항목명·세부 내용)을 DB에 적재<br>- 점검 결과의 ISMS-P 번호와 연결해 화면에 항목 내용까지 표시 |
+| **서비스&nbsp;이름** | Cloud Map |
+| **한&nbsp;줄&nbsp;설명** | Prowler로 스캔을 마친 결과 JSON을 PostgreSQL에 적재하고, 이 데이터로 AWS 구성도와 보안 점검 항목을 화면에 표시하는 3-tier 웹앱 |
+| **주제&nbsp;선택&nbsp;이유** | 문제<br>- AWS를 쓰지만 보안 전문가가 아닌 사용자는 Prowler 스캔 결과(JSON)만으로 어느 리소스에 어떤 문제가 있는지 파악하기 어려움<br>해결 방향<br>- AWS 구성도: DB의 리소스 관계로 구성도를 생성하고, 리소스별 점검 결과를 함께 표시해 문제 위치를 시각화<br>- 보안 점검 페이지: 점검 항목마다 무엇이 문제인지(점검 결과), 왜 위험한지(보안 위험), 어떻게 해결하는지(AWS 개선 권고), 어떤 정책 기준과 관련되는지(ISMS-P 매핑)를 한 화면에서 파악 |
+| **향후&nbsp;확장** | Prowler 점검 실행<br>- 웹 화면에서 AWS 계정을 연결하고 원하는 시점에 Prowler 점검 실행<br>- 점검 결과를 DB에 바로 적재해 구성도와 점검 목록에 반영<br>ISMS-P 매핑<br>- ISMS-P 인증 기준 항목(번호·항목명·세부 내용)을 DB에 적재<br>- 점검 결과의 ISMS-P 번호와 연결해 화면에 항목 내용까지 표시 |
 
 ### 1-1. 주요 기능
 
@@ -36,7 +36,7 @@
 
 ### 2-2. 요청 흐름 (Flow chart)
 
-![요청 흐름](images/request-flow.webp)
+<img src="images/request-flow.webp" alt="요청 흐름" width="720">
 
 ```text
     Browser                nginx (web)            PostgREST (api)          PostgreSQL (db)
@@ -145,7 +145,7 @@
   <tr><td><code>cloud-map-web</code></td><td>웹 화면 파일(<code>index.html</code>, <code>style.css</code>, <code>app.js</code>)</td></tr>
   <tr><td><code>cloud-map-web-icons</code></td><td>구성도 아이콘 SVG 8개</td></tr>
   <tr><td><code>cloud-map-web-nginx</code></td><td><code>/api/</code> → <code>cloud-map-api:3000</code> 프록시 설정</td></tr>
-  <tr><td><b>projected 볼륨</b></td><td>DB·웹 Deployment</td><td>여러 ConfigMap을 한 폴더에 합쳐 마운트. 샘플 3개 → DB <code>/cloud-map-data</code>, 화면·아이콘 → nginx 문서 루트</td></tr>
+  <tr><td><b>projected&nbsp;볼륨</b></td><td>DB·웹 Deployment</td><td>여러 ConfigMap을 한 폴더에 합쳐 마운트. 샘플 3개 → DB <code>/cloud-map-data</code>, 화면·아이콘 → nginx 문서 루트</td></tr>
   <tr><td><b>Probe</b></td><td>3개 Deployment 전체</td><td>Readiness 실패 시 Service 트래픽 제외, Liveness 실패 시 컨테이너 재시작</td></tr>
   <tr><td><b>resources</b></td><td>3개 Deployment 전체</td><td>Sandbox 할당량 안에서 requests/limits 지정</td></tr>
 </table>
@@ -177,22 +177,28 @@
 | `web-icons-configmap.yaml` | 구성도 아이콘 | SVG 8개 |
 | `web-nginx-configmap.yaml` | nginx 프록시 설정 | `/api/` → `cloud-map-api:3000` |
 
-## 4. 사용 이미지
+## 4. 사용 이미지와 선정 이유
 
-**PostgreSQL** · `quay.io/sclorg/postgresql-16-c9s:20261021` · 포트 5432
-- 비루트 실행 지원: OpenShift가 임의 UID로 실행해도 데이터 폴더 권한 오류 없이 동작
-- 자동 초기화: 환경변수(`POSTGRESQL_USER` 등)만으로 계정과 DB 생성, start 훅 폴더로 초기화 SQL 실행
-- 다운로드 제한 없음: Docker Hub가 아닌 quay.io 이미지
+**PostgreSQL**
+- 사용 이미지: `quay.io/sclorg/postgresql-16-c9s:20261021` · 포트 5432
+- 선정 이유
+  - 비루트 실행 지원: OpenShift가 임의 UID로 실행해도 데이터 폴더 권한 오류 없이 동작
+  - 자동 초기화: 환경변수(`POSTGRESQL_USER` 등)만으로 계정과 DB 생성, start 훅 폴더로 초기화 SQL 실행
+  - 다운로드 제한 없음: Docker Hub가 아닌 quay.io 이미지
 
-**PostgREST** · `docker.io/postgrest/postgrest:v12.2.3` · 포트 3000(API), 3001(상태 확인)
-- 코드 없는 API: DB 스키마를 설정만으로 읽기 전용 REST API로 공개
-- 가벼움: 단일 실행 파일이라 메모리 사용량이 작고 비루트로 실행
-- Docker Hub 이미지라서 Sandbox에서 다운로드 가능 여부를 먼저 확인한 뒤 사용
+**PostgREST**
+- 사용 이미지: `docker.io/postgrest/postgrest:v12.2.3` · 포트 3000(API), 3001(상태 확인)
+- 선정 이유
+  - 코드 없는 API: DB 스키마를 설정만으로 읽기 전용 REST API로 공개
+  - 가벼움: 단일 실행 파일이라 메모리 사용량이 작고 비루트로 실행
+  - Docker Hub 이미지라서 Sandbox에서 다운로드 가능 여부를 먼저 확인한 뒤 사용
 
-**nginx** · `registry.access.redhat.com/ubi9/nginx-124:1-1793106205` · 포트 8080
-- 비루트 실행 지원: Red Hat UBI 기반이라 OpenShift 임의 UID 환경에서 그대로 동작
-- 1024 이상 포트: 8080을 사용해 비루트의 80 포트 바인딩 오류(`bind: permission denied`)가 없음
-- 설정 확장 경로: `nginx.default.d` 폴더에 `/api/` 프록시 설정만 추가하면 됨
+**nginx**
+- 사용 이미지: `registry.access.redhat.com/ubi9/nginx-124:1-1793106205` · 포트 8080
+- 선정 이유
+  - 비루트 실행 지원: Red Hat UBI 기반이라 OpenShift 임의 UID 환경에서 그대로 동작
+  - 1024 이상 포트: 8080을 사용해 비루트의 80 포트 바인딩 오류(`bind: permission denied`)가 없음
+  - 설정 확장 경로: `nginx.default.d` 폴더에 `/api/` 프록시 설정만 추가하면 됨
 
 ## 5. 배포 방법
 
@@ -262,7 +268,7 @@ Developer Sandbox(`glnam11-2-dev`)에서 `oc delete -f k8s/` 후 `oc apply -f k8
 
 ## 7. 어려웠던 점
 
-### 7-1. 용도가 다른 두 오픈소스 결합
+### 7-1. 초기 설계의 한계와 구조 변경
 
 **문제**
 - 첫 목표: 오픈소스 두 개를 결합해 DB 기반 AWS 구성도 웹앱 구성
@@ -300,7 +306,7 @@ Developer Sandbox(`glnam11-2-dev`)에서 `oc delete -f k8s/` 후 `oc apply -f k8
 
 ## 8. AI·참고자료 활용 내역
 
-### 8-1. 역할 구분
+### 8-1. AI와 역할 구분
 
 | 작업 | 수행 |
 |---|---|
